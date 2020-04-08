@@ -1,4 +1,3 @@
-import numpy
 import matplotlib.pyplot as plt
 import SubCalc as sc
 
@@ -45,42 +44,43 @@ for x in range(0, len(breakdown_field), 1):
 print(di_thick_min)
 print(di_names)
 
-weight_best_series, thick_best_series, stack_best_series, name_plate_series, name_di_series, area_series = sc.Series(plate_mass_density, di_const, di_max_min, di_thick_min, needed_capacitance, plate_max_min, di_mass_density).Calculate()
-weight_best_parallel, thick_best_parallel, stack_best_parallel, name_plate_parallel, name_di_parallel, area_parallel, height_parallel = sc.Parallel(plate_mass_density, di_const, di_max_min, di_thick_min, needed_capacitance, plate_max_min, di_mass_density).Calculate()
+weight_best_series, thick_best_series, stack_best_series, name_plate_series, name_di_series, area_series, height_series, volume_series = sc.Series(plate_mass_density, di_const, di_max_min, di_thick_min, needed_capacitance, plate_max_min, di_mass_density).Calculate()
+weight_best_parallel, thick_best_parallel, stack_best_parallel, name_plate_parallel, name_di_parallel, area_parallel, height_parallel, volume_parallel = sc.Parallel(plate_mass_density, di_const, di_max_min, di_thick_min, needed_capacitance, plate_max_min, di_mass_density).Calculate()
 
-weight_data_series, stack_data_series = sc.Name2(plate_mass_density, di_const, needed_capacitance, plate_max_min, di_mass_density, name_di_series, name_plate_series, thick_best_series, 0).SeriesGraphDataWvS()
-weight_data_series2, thick_data_series = sc.Name3(plate_mass_density, di_const, di_max_min, di_thick_min, needed_capacitance, plate_max_min, di_mass_density, name_di_series, name_plate_series, stack_best_series).SeriesGraphDataWvT()
+weight_data_series, stack_data_series = sc.WvS(plate_mass_density, di_const, needed_capacitance, plate_max_min, di_mass_density, name_di_series, name_plate_series, thick_best_series, 0).SeriesGraphDataWvS()
+weight_data_series2, thick_data_series = sc.WvT(plate_mass_density, di_const, di_max_min, di_thick_min, needed_capacitance, plate_max_min, di_mass_density, name_di_series, name_plate_series, stack_best_series).SeriesGraphDataWvT()
 
-weight_data_parallel, stack_data_parallel = sc.Name2(plate_mass_density, di_const, needed_capacitance, plate_max_min, di_mass_density, name_di_parallel, name_plate_parallel, thick_best_parallel, di_thick_min).ParallelGraphDataWvS()
-weight_data_parallel2, thick_data_parallel = sc.Name3(plate_mass_density, di_const, di_max_min, di_thick_min, needed_capacitance, plate_max_min, di_mass_density, name_di_parallel, name_plate_parallel, stack_best_parallel).ParallelGraphDataWvT()
+weight_data_parallel, stack_data_parallel = sc.WvS(plate_mass_density, di_const, needed_capacitance, plate_max_min, di_mass_density, name_di_parallel, name_plate_parallel, thick_best_parallel, di_thick_min).ParallelGraphDataWvS()
+weight_data_parallel2, thick_data_parallel = sc.WvT(plate_mass_density, di_const, di_max_min, di_thick_min, needed_capacitance, plate_max_min, di_mass_density, name_di_parallel, name_plate_parallel, stack_best_parallel).ParallelGraphDataWvT()
 
-if (weight_best_series < weight_best_parallel):
+if (weight_best_series < weight_best_parallel):  # If the series weight is less then the parrallel weight then it prints information regarding the series circuit
     print()
     print("Best Material")
     print("Plate:", plate_names[name_plate_series])
     print("Dielectric:", di_names[name_di_series])
-    #di_best_name = di_names[name_di_series]
-    #plate_best_name = plate_names[name_plate_series]
     print("Mass(kg):", weight_best_series)
     print("Thickness(m):", thick_best_series)
     print("Stack Height:", stack_best_series)
     print("Area", area_series)
+    print("Height", height_series)
+    print("Volume", volume_series)
     print("Circuit Type: Series")
     print("Time to 60Mph", (weight_best_series * (26.8223 ** 2) / (2 * 74.57)), 'seconds')
-elif(weight_best_parallel < weight_best_series):
+elif(weight_best_parallel < weight_best_series):  # If the parallel weight is less then the series weight then it prints information regarding the parallel circuit
     print()
     print("Best Material")
     print("Plate:", plate_names[name_plate_parallel])
     print("Dielectric:", di_names[name_di_parallel])
-    #di_best_name = di_names[name_di_parallel]
-    #plate_best_name = plate_names[name_plate_parallel]
     print("Mass(kg):", weight_best_parallel)
     print("Thickness(m):", thick_best_parallel)
     print("Stack Height:", stack_best_parallel)
     print("Area", area_parallel)
     print("Height", height_parallel)
+    print("Volume", volume_parallel)
     print("Circuit Type: Parallel")
     print("Time to 60Mph", ((weight_best_parallel+1500)*(26.8223**2)/(2*74570)), 'seconds')
+
+# the rest of the code is in reference to printing graphs for the weight vs thickness and weight vs stack amount
 
 plt.figure('Series WvS')
 plt.plot(weight_data_series, stack_data_series)
